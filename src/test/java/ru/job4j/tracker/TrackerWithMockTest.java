@@ -103,7 +103,7 @@ public class TrackerWithMockTest {
         String ln = System.lineSeparator();
         assertThat(output.toString()).contains(
                 "=== Create a new Item. ===" + ln
-                        + "Added item: Item{id=1, name='testItem', created="
+                        + "Added item: Item(id=1, name=testItem, created="
         );
     }
 

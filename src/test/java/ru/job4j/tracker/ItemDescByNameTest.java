@@ -3,7 +3,6 @@ package ru.job4j.tracker;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -25,7 +24,7 @@ public class ItemDescByNameTest {
                 new Item("Fourth", 4),
                 new Item("First", 1)
         ));
-        Collections.sort(item, new ItemDescByName());
+        item.sort(new ItemDescByName());
         assertEquals(item, expected);
     }
 }
