@@ -1,12 +1,21 @@
 package ru.job4j.lombok;
 
-import lombok.Data;
+import lombok.*;
 
+import java.util.List;
+
+@Builder(builderMethodName = "of")
 @Data
+@ToString
+@Getter
+@Setter
 public class Bird {
     private String color;
     private int age;
     private int wingspan;
+
+    @Singular("places")
+    private List<String> places;
 }
 /*
 
