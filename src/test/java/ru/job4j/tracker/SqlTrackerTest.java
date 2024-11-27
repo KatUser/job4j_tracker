@@ -11,7 +11,6 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Properties;
 
-@Disabled
 public class SqlTrackerTest {
     private static Connection connection;
 

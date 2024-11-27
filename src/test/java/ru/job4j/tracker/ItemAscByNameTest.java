@@ -2,7 +2,6 @@ package ru.job4j.tracker;
 
 import org.junit.Test;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,19 +11,18 @@ public class ItemAscByNameTest {
 
     @Test
     public void whenSortAscendingOrder() {
-        var nowDate = LocalDateTime.now();
         List<Item> item = new ArrayList<>(List.of(
-                new Item("Third", 3, nowDate),
-                new Item("Fourth", 4, nowDate),
-                new Item("First", 1, nowDate),
-                new Item("Second", 2, nowDate)
+                new Item("Third", 3),
+                new Item("Fourth", 4),
+                new Item("First", 1),
+                new Item("Second", 2)
         ));
 
         List<Item> expected = new ArrayList<>(List.of(
-                new Item("First", 1, nowDate),
-                new Item("Fourth", 4, nowDate),
-                new Item("Second", 2, nowDate),
-                new Item("Third", 3, nowDate)
+                new Item("First", 1),
+                new Item("Fourth", 4),
+                new Item("Second", 2),
+                new Item("Third", 3)
 
         ));
         item.sort(new ItemAscByName());
