@@ -62,8 +62,8 @@ public class HibernateRun {
         session.close();
     }
 
-    public static List<Item> findAll(SessionFactory sf) {
-        Session session = sf.openSession();
+    public static List<Item> findAll(SessionFactory sessionFactory) {
+        Session session = sessionFactory.openSession();
         session.beginTransaction();
         List<Item> result = session.createQuery("from Item", Item.class).list();
         session.getTransaction().commit();
