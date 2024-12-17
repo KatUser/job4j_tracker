@@ -32,13 +32,14 @@ public class HbmTracker implements Store, AutoCloseable {
 
     @Override
     public boolean replace(int id, Item item) {
-        boolean isReplaced = false;
         Session session = sessionFactory.openSession();
+        int affectedRows = 0;
         try {
             session.beginTransaction();
-            session.createQuery("""
+            affectedRows = session.createQuery("""
                             UPDATE Item
-                            SET name = :fName, created = :fCreated
+                            SET name = :fName,
+                            created = :fCreated
                             WHERE id = :fid
                             """, Item.class)
                     .setParameter("fName", item.getName())
@@ -46,13 +47,12 @@ public class HbmTracker implements Store, AutoCloseable {
                     .setParameter("fId", id)
                     .executeUpdate();
             session.getTransaction().commit();
-            isReplaced = true;
         } catch (Exception e) {
             session.getTransaction().rollback();
         } finally {
             session.close();
         }
-        return isReplaced;
+        return affectedRows > 0;
     }
 
     @Override
