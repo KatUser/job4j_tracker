@@ -1,9 +1,13 @@
 package ru.job4j.tracker;
 
 import lombok.Data;
+import ru.job4j.toone.User;
+
 import javax.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "items")
@@ -14,6 +18,14 @@ public class Item {
     private Integer id;
     private String name;
     private LocalDateTime created = LocalDateTime.now().withNano(0);
+
+    @ManyToMany
+    @JoinTable(
+            name = "participates", /* тут связь вторичных ключей */
+            joinColumns = { @JoinColumn(name = "item_id") }, /* Определяет ключ родительского объекта = Item.id */
+            inverseJoinColumns = { @JoinColumn(name = "user_id") } /* определяет ключ объекта, который мы загружаем в родительский объект. */
+    )
+    private List<User> participates = new ArrayList<>();
 
     public Item() {
     }
