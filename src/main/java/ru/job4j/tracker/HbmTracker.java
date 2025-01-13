@@ -40,7 +40,7 @@ public class HbmTracker implements Store, AutoCloseable {
                             UPDATE Item
                             SET name = :fName,
                             created = :fCreated
-                            WHERE id = :fid
+                            WHERE id = :fId
                             """, Item.class)
                     .setParameter("fName", item.getName())
                     .setParameter("fCreated", item.getCreated())
