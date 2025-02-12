@@ -30,10 +30,6 @@ public class HbmRunRun {
                     .setParameter("fId", user.getId())
                     .getSingleResult();
             stored.getMessengers().forEach(System.out::println);
-//            deleteAll(UserMessenger.class, sf);
-//            deleteAll(User.class, sf);
-//            deleteAll(Role.class, sf);
-
         }  catch (Exception e) {
             e.printStackTrace();
         } finally {
