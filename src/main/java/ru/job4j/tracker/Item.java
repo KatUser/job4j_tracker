@@ -6,6 +6,7 @@ import ru.job4j.toone.User;
 import javax.persistence.*;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,9 +18,9 @@ public class Item {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String name;
-    private LocalDateTime created = LocalDateTime.now().withNano(0);
+    private LocalDateTime created = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "participates", /* тут связь вторичных ключей */
             joinColumns = { @JoinColumn(name = "item_id") }, /* Определяет ключ родительского объекта = Item.id */
@@ -34,14 +35,14 @@ public class Item {
         this.name = name;
     }
 
-    public Item(String name, int id) {
-        this.name = name;
+    public Item(int id, String name) {
         this.id = id;
+        this.name = name;
     }
 
-    public Item(String name, int id, LocalDateTime created) {
-        this.name = name;
+    public Item(int id, String name,  LocalDateTime created) {
         this.id = id;
+        this.name = name;
         this.created = created;
     }
 }

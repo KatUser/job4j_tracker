@@ -10,14 +10,14 @@ import java.util.Collections;
 import java.util.List;
 
 public class HbmTracker implements Store, AutoCloseable {
-    private final StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
+    private static final StandardServiceRegistry REGISTRY = new StandardServiceRegistryBuilder()
             .configure().build();
-    private final SessionFactory sessionFactory = new MetadataSources(registry)
+    private static final SessionFactory SESSION_FACTORY = new MetadataSources(REGISTRY)
             .buildMetadata().buildSessionFactory();
 
     @Override
     public Item add(Item item) {
-        Session session = sessionFactory.openSession();
+        Session session = SESSION_FACTORY.openSession();
         try {
             session.beginTransaction();
             session.save(item);
@@ -32,7 +32,7 @@ public class HbmTracker implements Store, AutoCloseable {
 
     @Override
     public boolean replace(int id, Item item) {
-        Session session = sessionFactory.openSession();
+        Session session = SESSION_FACTORY.openSession();
         int affectedRows = 0;
         try {
             session.beginTransaction();
@@ -41,11 +41,12 @@ public class HbmTracker implements Store, AutoCloseable {
                             SET name = :fName,
                             created = :fCreated
                             WHERE id = :fId
-                            """, Item.class)
+                            """)
                     .setParameter("fName", item.getName())
                     .setParameter("fCreated", item.getCreated())
                     .setParameter("fId", id)
                     .executeUpdate();
+
             session.getTransaction().commit();
         } catch (Exception e) {
             session.getTransaction().rollback();
@@ -57,7 +58,7 @@ public class HbmTracker implements Store, AutoCloseable {
 
     @Override
     public void delete(int id) {
-        Session session = sessionFactory.openSession();
+        Session session = SESSION_FACTORY.openSession();
         try {
             session.beginTransaction();
             session.createQuery("DELETE Item WHERE id = :fId")
@@ -74,10 +75,11 @@ public class HbmTracker implements Store, AutoCloseable {
     @Override
     public List<Item> findAll() {
         List<Item> foundItems = Collections.emptyList();
-        Session session = sessionFactory.openSession();
+        Session session = SESSION_FACTORY.openSession();
         try {
             session.beginTransaction();
-            session.createQuery("from Item", Item.class);
+            foundItems = session.createQuery("from Item",
+                            Item.class).getResultList();
             session.getTransaction().commit();
         } catch (Exception e) {
             session.getTransaction().rollback();
@@ -89,7 +91,7 @@ public class HbmTracker implements Store, AutoCloseable {
 
     @Override
     public List<Item> findByName(String key) {
-        Session session = sessionFactory.openSession();
+        Session session = SESSION_FACTORY.openSession();
         List<Item> foundItems = Collections.emptyList();
         try {
             session.beginTransaction();
@@ -98,6 +100,7 @@ public class HbmTracker implements Store, AutoCloseable {
                     )
                     .setParameter("fKey", key)
                     .getResultList();
+            session.getTransaction().commit();
         } catch (Exception e) {
             session.getTransaction().rollback();
         } finally {
@@ -108,7 +111,7 @@ public class HbmTracker implements Store, AutoCloseable {
 
     @Override
     public Item findById(int id) {
-        Session session = sessionFactory.openSession();
+        Session session = SESSION_FACTORY.openSession();
         Item foundItem = null;
         try {
             session.beginTransaction();
@@ -124,8 +127,21 @@ public class HbmTracker implements Store, AutoCloseable {
         return foundItem;
     }
 
+    public static void deleteAllItems() {
+        Session session = SESSION_FACTORY.openSession();
+        try {
+            session.beginTransaction();
+            session.createQuery("DELETE from Item").executeUpdate();
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            session.getTransaction().rollback();
+        } finally {
+            session.close();
+        }
+    }
+
     @Override
     public void close() {
-        StandardServiceRegistryBuilder.destroy(registry);
+        StandardServiceRegistryBuilder.destroy(REGISTRY);
     }
 }

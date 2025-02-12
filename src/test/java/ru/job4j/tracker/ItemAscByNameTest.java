@@ -12,17 +12,17 @@ public class ItemAscByNameTest {
     @Test
     public void whenSortAscendingOrder() {
         List<Item> item = new ArrayList<>(List.of(
-                new Item("Third", 3),
-                new Item("Fourth", 4),
-                new Item("First", 1),
-                new Item("Second", 2)
+                new Item(3, "Third"),
+                new Item(4, "Fourth"),
+                new Item(1, "First"),
+                new Item(2, "Second")
         ));
 
         List<Item> expected = new ArrayList<>(List.of(
-                new Item("First", 1),
-                new Item("Fourth", 4),
-                new Item("Second", 2),
-                new Item("Third", 3)
+                new Item(1, "First"),
+                new Item(4, "Fourth"),
+                new Item(2, "Second"),
+                new Item(3, "Third")
 
         ));
         item.sort(new ItemAscByName());

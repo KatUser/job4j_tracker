@@ -36,8 +36,8 @@ public class SqlTracker implements Store {
 
     private Item createNewItem(ResultSet resultSet) throws SQLException {
         return new Item(
-                resultSet.getString("name"),
                 resultSet.getInt("id"),
+                resultSet.getString("name"),
                 resultSet.getTimestamp("created")
                         .toLocalDateTime().withNano(0)
         );
